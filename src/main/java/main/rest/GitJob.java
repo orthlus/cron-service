@@ -1,4 +1,4 @@
-package main;
+package main.rest;
 
 
 import jakarta.annotation.PostConstruct;

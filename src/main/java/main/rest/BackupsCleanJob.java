@@ -35,7 +35,7 @@ public class BackupsCleanJob extends S3Client {
 	@Value("${main_tech.backups.cleaner.groups}")
 	private String[] groups;
 
-	@Scheduled(fixedRate = 4, timeUnit = TimeUnit.DAYS)
+	@Scheduled(fixedRateString = "${cron.backups.execute.fixed_rate.days}", timeUnit = TimeUnit.DAYS)
 	public void execute() {
 		AmazonS3 s3 = client();
 

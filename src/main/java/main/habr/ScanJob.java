@@ -18,7 +18,7 @@ public class ScanJob {
 	private final HabrTelegram habrTelegram;
 	private final HabrRepo repo;
 
-	@Scheduled(cron = "0 0 0/3 * * *", zone = "Europe/Moscow")
+	@Scheduled(cron = "${cron.habr.scan}", zone = "Europe/Moscow")
 	@Retryable(backoff = @Backoff(delay = 60_000))
 	public void scanNewPosts() {
 		Set<String> posts = habrClient.getPostsFromRss();

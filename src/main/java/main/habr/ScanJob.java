@@ -41,6 +41,6 @@ public class ScanJob {
 	}
 
 	private String telegramMsg(String url) {
-		return "Новый пост с аббревиатурой:\n" + url;
+		return url;
 	}
 }

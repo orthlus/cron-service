@@ -104,6 +104,11 @@
             <artifactId>telegrambots</artifactId>
             <version>6.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>art.aelaort</groupId>
+            <artifactId>aelaort-telegram-models</artifactId>
+            <version>4.0</version>
+        </dependency>
     </dependencies>
 
     <build>

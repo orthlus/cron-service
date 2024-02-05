@@ -38,6 +38,7 @@ public class ScanJob {
 
 		repo.saveLastRssPosts(posts);
 		repo.saveLastRssNews(news);
+		log.info("habr finish scan, {} new posts, {} new news", newPosts.size(), newNews.size());
 	}
 
 	private String telegramMsg(String url) {

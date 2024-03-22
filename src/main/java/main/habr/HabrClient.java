@@ -47,7 +47,12 @@ public class HabrClient {
 						type.getTypeName().equals("java.lang.String") ?
 								new Decoder.Default().decode(response, type) :
 								new JacksonDecoder(new XmlMapper()).decode(response, type))
-				.requestInterceptor(new HttpDelayInterceptor(delay))
+				.requestInterceptor(template -> {
+					try {
+						TimeUnit.SECONDS.sleep(delay);
+					} catch (InterruptedException ignored) {
+					}
+				})
 				.target(HabrHttp.class, baseUrl);
 	}
 

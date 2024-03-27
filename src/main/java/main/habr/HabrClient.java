@@ -1,72 +1,37 @@
 package main.habr;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import feign.Feign;
-import feign.Param;
-import feign.RequestLine;
-import feign.codec.Decoder;
-import feign.jackson.JacksonDecoder;
-import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main.habr.rss.RssFeed;
 import main.habr.rss.RssMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static org.mapstruct.factory.Mappers.getMapper;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class HabrClient {
-	@Value("${habr.http.timeout}")
-	private int timeout;
-	@Value("${habr.http.delay}")
-	private int delay;
 	private final RssMapper rssMapper = getMapper(RssMapper.class);
-	private HabrHttp client;
-	private final String baseUrl = "https://habr.com/ru";
-
-	public interface HabrHttp {
-		@RequestLine("GET /")
-		String pageContent(URI uri);
-
-		@RequestLine("GET /rss/{type}/?limit=100")
-		RssFeed rss(@Param("type") String type);
-	}
-
-	@PostConstruct
-	private void init() {
-		feign.Request.Options options = new feign.Request.Options(timeout, TimeUnit.SECONDS, timeout, TimeUnit.SECONDS, true);
-		client = Feign.builder()
-				.options(options)
-				.decoder((response, type) ->
-						type.getTypeName().equals("java.lang.String") ?
-								new Decoder.Default().decode(response, type) :
-								new JacksonDecoder(new XmlMapper()).decode(response, type))
-				.requestInterceptor(template -> {
-					try {
-						TimeUnit.SECONDS.sleep(delay);
-					} catch (InterruptedException ignored) {
-					}
-				})
-				.target(HabrHttp.class, baseUrl);
-	}
+	private final RestTemplate client;
 
 	public Set<String> getNewsFromRss() {
-		return rssMapper.map(client.rss("news").getPosts());
+		RssFeed object = client.getForObject("/rss/news/?limit=100", RssFeed.class);
+		return rssMapper.map(object.getPosts());
 	}
 
 	public Set<String> getPostsFromRss() {
-		return rssMapper.map(client.rss("all").getPosts());
+		RssFeed object = client.getForObject("/rss/all/?limit=100", RssFeed.class);
+		return rssMapper.map(object.getPosts());
 	}
 
 	public boolean isPostHasABBR(String url) {
 		try {
-			String pageContent = client.pageContent(URI.create(url));
+			String pageContent = client.getForObject(URI.create(url), String.class);
 			return pageContent.contains("class=\"habraabbr\"");
 		} catch (Exception e) {
 			return false;

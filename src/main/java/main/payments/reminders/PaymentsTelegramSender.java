@@ -3,15 +3,14 @@ package main.payments.reminders;
 import art.aelaort.telegram.entity.RemindToSend;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.DefaultAbsSender;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.bots.TelegramSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
-public class PaymentsTelegramSender extends DefaultAbsSender {
+public class PaymentsTelegramSender extends TelegramSender {
 	private final KeyboardsProvider keyboards;
 	@Value("${telegram.admin.id}")
 	private long adminId;
@@ -19,7 +18,7 @@ public class PaymentsTelegramSender extends DefaultAbsSender {
 			@Value("${payments.telegram.bot.token}")
 			String token,
 			KeyboardsProvider keyboards) {
-		super(new DefaultBotOptions(), token);
+		super(token);
 		this.keyboards = keyboards;
 	}
 

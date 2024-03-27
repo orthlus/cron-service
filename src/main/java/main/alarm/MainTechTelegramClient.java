@@ -3,8 +3,7 @@ package main.alarm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.DefaultAbsSender;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.bots.TelegramSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -12,12 +11,12 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
 @Component
-public class MainTechTelegramClient extends DefaultAbsSender {
+public class MainTechTelegramClient extends TelegramSender {
 	@Value("${telegram.admin.id}")
 	private long adminId;
 
 	protected MainTechTelegramClient(@Value("${main_tech.telegram.bot.token}") String token) {
-		super(new DefaultBotOptions(), token);
+		super(token);
 	}
 
 	public void deleteMessage(MessageInfo message) {

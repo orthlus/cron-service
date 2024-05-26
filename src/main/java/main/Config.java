@@ -1,4 +1,4 @@
-package main.habr;
+package main;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -26,6 +26,16 @@ public class Config {
 					}
 					return execution.execute(request, body);
 				})
+				.build();
+	}
+
+	@Bean
+	public RestTemplate cloudflare(RestTemplateBuilder restTemplateBuilder,
+							 @Value("${cloudflare.dns.token}") String token) {
+		return restTemplateBuilder
+				.rootUri("https://api.cloudflare.com/client/v4")
+				.defaultHeader("authorization", "Bearer " + token)
+				.defaultHeader("content-type", "application/json")
 				.build();
 	}
 }

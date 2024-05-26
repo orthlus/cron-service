@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main.habr.rss.RssFeed;
 import main.habr.rss.RssMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +18,7 @@ import static org.mapstruct.factory.Mappers.getMapper;
 @RequiredArgsConstructor
 public class HabrClient {
 	private final RssMapper rssMapper = getMapper(RssMapper.class);
+	@Qualifier("habr")
 	private final RestTemplate client;
 
 	public Set<String> getNewsFromRss() {

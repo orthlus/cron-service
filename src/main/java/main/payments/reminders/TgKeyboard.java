@@ -2,6 +2,7 @@ package main.payments.reminders;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,15 +18,15 @@ public interface TgKeyboard {
 		return new ArrayList<>(size);
 	}
 
-	default InlineKeyboardMarkup inlineMarkup(List<List<InlineKeyboardButton>> keyboard) {
+	default InlineKeyboardMarkup inlineMarkup(List<InlineKeyboardRow> keyboard) {
 		return new InlineKeyboardMarkup(keyboard);
 	}
 
-	default InlineKeyboardMarkup inlineMarkup(List<InlineKeyboardButton>... rows) {
-		return new InlineKeyboardMarkup(inlineTable(rows));
+	default InlineKeyboardMarkup inlineMarkup(InlineKeyboardRow... rows) {
+		return new InlineKeyboardMarkup(Arrays.asList(rows));
 	}
 
-	default List<List<InlineKeyboardButton>> inlineTable(List<InlineKeyboardButton>... rows) {
+	default List<InlineKeyboardRow> inlineTable(InlineKeyboardRow... rows) {
 		return Arrays.asList(rows);
 	}
 
@@ -37,7 +38,7 @@ public interface TgKeyboard {
 		return new ButtonPair(name, query);
 	}
 
-	default List<InlineKeyboardButton> row(ButtonPair... buttons) {
+	default InlineKeyboardRow row(ButtonPair... buttons) {
 		List<InlineKeyboardButton> result = new LinkedList<>();
 		for (ButtonPair buttonPair : buttons) {
 			InlineKeyboardButton button = buttonPair == null ?
@@ -45,7 +46,7 @@ public interface TgKeyboard {
 					builder().text(buttonPair.name()).callbackData(buttonPair.query()).build();
 			result.add(button);
 		}
-		return result;
+		return new InlineKeyboardRow(result);
 	}
 
 	record ButtonPair(String name, String query) {

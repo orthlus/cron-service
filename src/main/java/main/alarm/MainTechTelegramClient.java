@@ -1,33 +1,31 @@
 package main.alarm;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
+
+import static art.aelaort.TelegramClientHelpers.execute;
 
 @Slf4j
 @Component
-public class MainTechTelegramClient extends TelegramSender {
+@RequiredArgsConstructor
+public class MainTechTelegramClient {
+	@Qualifier("maintechTelegramClient")
+	private final TelegramClient telegramClient;
 	@Value("${telegram.admin.id}")
 	private long adminId;
 
-	protected MainTechTelegramClient(@Value("${main_tech.telegram.bot.token}") String token) {
-		super(token);
-	}
-
 	public void deleteMessage(MessageInfo message) {
-		long chatId = message.chatId();
-		int messageId = message.messageId();
-		try {
-			execute(new DeleteMessage(String.valueOf(chatId), messageId));
-		} catch (TelegramApiException e) {
-			log.error("{} - Error delete message, chat {} messageId {}", this.getClass().getName(), chatId, messageId, e);
-			throw new RuntimeException(e);
-		}
+		execute(DeleteMessage.builder()
+				.messageId(message.messageId())
+				.chatId(message.chatId())
+				.build(), telegramClient);
 	}
 
 	public MessageInfo sendWithOutPreview(String text) {
@@ -36,12 +34,7 @@ public class MainTechTelegramClient extends TelegramSender {
 				.text(text)
 				.disableWebPagePreview(true)
 				.build();
-		try {
-			Message execute = execute(message);
-			return new MessageInfo(execute.getChatId(), execute.getMessageId());
-		} catch (TelegramApiException e) {
-			log.error("main tech send error");
-			throw new RuntimeException(e);
-		}
+		Message execute = execute(message, telegramClient);
+		return new MessageInfo(execute.getChatId(), execute.getMessageId());
 	}
 }

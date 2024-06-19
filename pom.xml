@@ -93,15 +93,20 @@
             <artifactId>guava</artifactId>
             <version>31.1-jre</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>6.7.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>art.aelaort</groupId>
             <artifactId>aelaort-telegram-models</artifactId>
             <version>4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>art.aelaort</groupId>
+            <artifactId>aelaort-telegrambots</artifactId>
+            <version>4.0-SHAPSHOT</version>
         </dependency>
     </dependencies>
 

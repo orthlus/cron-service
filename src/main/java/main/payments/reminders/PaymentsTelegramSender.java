@@ -1,26 +1,25 @@
 package main.payments.reminders;
 
 import art.aelaort.telegram.entity.RemindToSend;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
+
+import static art.aelaort.TelegramClientHelpers.execute;
 
 @Component
-public class PaymentsTelegramSender extends TelegramSender {
+@RequiredArgsConstructor
+public class PaymentsTelegramSender {
 	private final KeyboardsProvider keyboards;
+	@Qualifier("paymentsTelegramClient")
+	private final TelegramClient telegramClient;
 	@Value("${telegram.admin.id}")
 	private long adminId;
-	protected PaymentsTelegramSender(
-			@Value("${payments.telegram.bot.token}")
-			String token,
-			KeyboardsProvider keyboards) {
-		super(token);
-		this.keyboards = keyboards;
-	}
 
 	public void sendRemind(RemindToSend remind) {
 		String msg = remind.getName();
@@ -34,10 +33,6 @@ public class PaymentsTelegramSender extends TelegramSender {
 				.text(text)
 				.replyMarkup(keyboard)
 				.build();
-		try {
-			execute(message);
-		} catch (TelegramApiException e) {
-			throw new RuntimeException(e);
-		}
+		execute(message, telegramClient);
 	}
 }

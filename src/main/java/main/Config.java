@@ -31,9 +31,10 @@ public class Config {
 
 	@Bean
 	public RestTemplate cloudflare(RestTemplateBuilder restTemplateBuilder,
-							 @Value("${cloudflare.dns.token}") String token) {
+							 @Value("${cloudflare.dns.token}") String token,
+							 @Value("${cloudflare.dns.url}") String url) {
 		return restTemplateBuilder
-				.rootUri("https://api.cloudflare.com/client/v4")
+				.rootUri(url)
 				.defaultHeader("authorization", "Bearer " + token)
 				.defaultHeader("content-type", "application/json")
 				.build();

@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class CloudflareBackuper extends S3Client {
-	@Value("${cloudflare.backuper.id}")
+	@Value("${cloudflare.backuper.s3.id}")
 	private String id;
-	@Value("${cloudflare.backuper.key}")
+	@Value("${cloudflare.backuper.s3.key}")
 	private String key;
-	@Value("${cloudflare.backuper.url}")
+	@Value("${cloudflare.backuper.s3.url}")
 	private String url;
-	@Value("${cloudflare.backuper.region}")
+	@Value("${cloudflare.backuper.s3.region}")
 	private String region;
-	@Value("${cloudflare.backuper.bucket}")
+	@Value("${cloudflare.backuper.s3.bucket}")
 	private String bucket;
 
 	public void uploadFileContent(String fileId, String fileContent) {

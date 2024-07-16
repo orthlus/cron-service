@@ -39,4 +39,12 @@ public class Config {
 				.defaultHeader("content-type", "application/json")
 				.build();
 	}
+
+	@Bean
+	public RestTemplate telegramBackuper(RestTemplateBuilder restTemplateBuilder,
+							 @Value("${telegram.backuper.tdl.url}") String url) {
+		return restTemplateBuilder
+				.rootUri(url)
+				.build();
+	}
 }

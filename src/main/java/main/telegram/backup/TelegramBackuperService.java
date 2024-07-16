@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import static main.Utils.now;
 
 @Component
 @RequiredArgsConstructor
@@ -18,11 +18,7 @@ public class TelegramBackuperService {
 	@Scheduled(cron = "${cron.telegram.backup}", zone = "Europe/Moscow")
 	public void backup() {
 		String chatBackupContent = telegramBackuperClient.getChatBackupContent();
-		String time = LocalDateTime.now().toString()
-				.replaceAll(":", "-")
-				.replace(".", "-")
-				.replace("T", "-");
-		String fileName = "%s-%s.json".formatted(s3Filename, time);
+		String fileName = "%s-%s.json".formatted(s3Filename, now());
 
 		telegramBackuperS3.uploadFileContent(fileName, chatBackupContent);
 	}

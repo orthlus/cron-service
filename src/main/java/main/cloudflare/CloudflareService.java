@@ -8,9 +8,10 @@ import main.cloudflare.dto.ZoneRecord;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static main.Utils.now;
 
 @Slf4j
 @Component
@@ -46,12 +47,5 @@ public class CloudflareService {
 		}
 
 		return result;
-	}
-
-	private static String now() {
-		return LocalDateTime.now().toString()
-				.replaceAll(":", "_")
-				.replaceAll("-", "_")
-				.replace(".", "_");
 	}
 }

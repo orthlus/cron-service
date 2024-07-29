@@ -31,17 +31,13 @@ public class ScanJob {
 
 		newPosts.stream()
 				.filter(habrClient::isPostHasABBR)
-				.forEach(url -> habrTelegram.sendChannelMessage(telegramMsg(url)));
+				.forEach(habrTelegram::sendChannelMessage);
 		newNews.stream()
 				.filter(habrClient::isPostHasABBR)
-				.forEach(url -> habrTelegram.sendChannelMessage(telegramMsg(url)));
+				.forEach(habrTelegram::sendChannelMessage);
 
 		habrStorage.saveLastRssPosts(posts);
 		habrStorage.saveLastRssNews(news);
 		log.info("habr finish scan, {} new posts, {} new news", newPosts.size(), newNews.size());
-	}
-
-	private String telegramMsg(String url) {
-		return url;
 	}
 }

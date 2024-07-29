@@ -28,4 +28,12 @@ public class S3Config {
 	) {
 		return new DefaultS3Params(id, key, url, region);
 	}
+
+	@Bean
+	public S3Params habr(
+			@Value("${habr.s3.id}") String id,
+			@Value("${habr.s3.key}") String key
+	) {
+		return new DefaultS3Params(id, key, url, region);
+	}
 }

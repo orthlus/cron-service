@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class Config {
+public class RestTemplatesConfig {
 	@Bean
 	public RestTemplate habr(RestTemplateBuilder restTemplateBuilder,
 							 @Value("${habr.http.timeout}") int timeout,

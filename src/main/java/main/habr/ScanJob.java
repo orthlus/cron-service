@@ -16,7 +16,6 @@ import java.util.Set;
 public class ScanJob {
 	private final HabrClient habrClient;
 	private final HabrTelegram habrTelegram;
-	private final HabrRepo repo;
 	private final HabrStorage habrStorage;
 
 	@Scheduled(cron = "${cron.habr.scan}", zone = "Europe/Moscow")
@@ -24,8 +23,6 @@ public class ScanJob {
 	public void scanNewPosts() {
 		Set<String> posts = habrClient.getPostsFromRss();
 		Set<String> news = habrClient.getNewsFromRss();
-//		Set<String> lastPosts = repo.getLastRssPosts();
-//		Set<String> lastNews = repo.getLastRssNews();
 		Set<String> lastPosts = habrStorage.getLastRssPosts();
 		Set<String> lastNews = habrStorage.getLastRssNews();
 
@@ -39,8 +36,6 @@ public class ScanJob {
 				.filter(habrClient::isPostHasABBR)
 				.forEach(url -> habrTelegram.sendChannelMessage(telegramMsg(url)));
 
-//		repo.saveLastRssPosts(posts);
-//		repo.saveLastRssNews(news);
 		habrStorage.saveLastRssPosts(posts);
 		habrStorage.saveLastRssNews(news);
 		log.info("habr finish scan, {} new posts, {} new news", newPosts.size(), newNews.size());

@@ -15,7 +15,7 @@ import static art.aelaort.S3ClientProvider.client;
 @Component
 @RequiredArgsConstructor
 public class CloudflareBackuper {
-	@Qualifier("cloudflare")
+	@Qualifier("cloudflareS3")
 	private final S3Params s3Config;
 	@Value("${cloudflare.backuper.s3.bucket}")
 	private String bucket;

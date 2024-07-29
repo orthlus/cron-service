@@ -14,7 +14,7 @@ public class S3Config {
 	private String region;
 
 	@Bean
-	public S3Params cloudflare(
+	public S3Params cloudflareS3(
 			@Value("${cloudflare.backuper.s3.id}") String id,
 			@Value("${cloudflare.backuper.s3.key}") String key
 	) {
@@ -22,7 +22,7 @@ public class S3Config {
 	}
 
 	@Bean
-	public S3Params telegram(
+	public S3Params telegramS3(
 			@Value("${telegram.backuper.s3.id}") String id,
 			@Value("${telegram.backuper.s3.key}") String key
 	) {
@@ -30,7 +30,7 @@ public class S3Config {
 	}
 
 	@Bean
-	public S3Params habr(
+	public S3Params habrS3(
 			@Value("${habr.s3.id}") String id,
 			@Value("${habr.s3.key}") String key
 	) {

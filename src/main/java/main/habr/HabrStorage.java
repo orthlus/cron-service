@@ -17,7 +17,7 @@ import static art.aelaort.S3ClientProvider.client;
 @Component
 @RequiredArgsConstructor
 public class HabrStorage {
-	@Qualifier("habr")
+	@Qualifier("habrS3")
 	private final S3Params habr;
 	@Value("${habr.s3.bucket}")
 	private String bucket;

@@ -3,6 +3,7 @@ package main.telegram.backup;
 import art.aelaort.S3Params;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -14,6 +15,7 @@ import static art.aelaort.S3ClientProvider.client;
 @Component
 @RequiredArgsConstructor
 public class TelegramBackuperS3 {
+	@Qualifier("telegramS3")
 	private final S3Params telegram;
 	@Value("${telegram.backuper.s3.bucket}")
 	private String bucket;

@@ -1,5 +1,6 @@
 package main.payments.reminders;
 
+import art.aelaort.TelegramKeyboard;
 import art.aelaort.telegram.callback.models.CallbackData;
 import art.aelaort.telegram.entity.RemindToSend;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +16,7 @@ import static art.aelaort.telegram.callback.CallbackType.SUBMIT_PAYMENT;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KeyboardsProvider implements TgKeyboard {
+public class KeyboardsProvider implements TelegramKeyboard {
 	private final CallbackTypeMapper typeMapper;
 	private final ObjectMapper mapper = new ObjectMapper();
 

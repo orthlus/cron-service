@@ -26,7 +26,6 @@ import static java.time.temporal.WeekFields.of;
 import static java.util.Locale.ENGLISH;
 import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static main.Main.zone;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 @Slf4j
@@ -58,7 +57,7 @@ public class GitJob {
 				.setDirectory(repoLocalPath.toFile())
 				.setCredentialsProvider(cred);
 
-		int bound = now(zone).get(of(ENGLISH).weekOfYear()) % 2 == 0 ? 5 : 30;
+		int bound = now().get(of(ENGLISH).weekOfYear()) % 2 == 0 ? 5 : 30;
 		int count = new SecureRandom().nextInt(bound) + 1;
 
 		try (Git git = cloneCommand.call()) {
@@ -78,7 +77,7 @@ public class GitJob {
 	private void doChanges(Path file, Git git) throws IOException, GitAPIException {
 		smartChangeFile(file);
 
-		String message = "add again at " + now(zone);
+		String message = "add again at " + now();
 		git.commit()
 				.setMessage(message)
 				.setAuthor("", login)

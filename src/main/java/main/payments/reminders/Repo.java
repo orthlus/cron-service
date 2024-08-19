@@ -2,7 +2,6 @@ package main.payments.reminders;
 
 import art.aelaort.telegram.entity.RemindToSend;
 import lombok.RequiredArgsConstructor;
-import main.Main;
 import main.tables.PaymentsHoldsOnReminders;
 import main.tables.PaymentsReminders;
 import org.jooq.Condition;
@@ -27,7 +26,7 @@ public class Repo {
 	private final PaymentsReminders pr = PAYMENTS_REMINDERS;
 
 	public List<RemindToSend> getRemindsForNow() {
-		LocalDateTime now = LocalDateTime.now(Main.zone);
+		LocalDateTime now = LocalDateTime.now();
 
 		Condition startDayEq = pr.START_DAY_OF_MONTH.lessOrEqual(extract(now, DatePart.DAY));
 		Condition endDayEq = pr.END_DAY_OF_MONTH.greaterOrEqual(extract(now, DatePart.DAY));

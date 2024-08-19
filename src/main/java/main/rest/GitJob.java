@@ -2,6 +2,7 @@ package main.rest;
 
 
 import jakarta.annotation.PostConstruct;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -37,11 +38,11 @@ public class GitJob {
 	private String pass;
 	@Value("${app.git.url}")
 	private String gitUrl;
-	private final String gitLocalPath = "/tmp/" + randomUUID();
+	private final Path gitLocalDir = Path.of("/tmp").resolve(randomUUID().toString());
 
 	@PostConstruct
 	private void init() throws IOException {
-		createDirectory(Path.of(gitLocalPath));
+		createDirectory(gitLocalDir);
 	}
 
 	@Scheduled(cron = "${cron.git.execute}")
@@ -49,12 +50,11 @@ public class GitJob {
 	public void execute() throws GitAPIException, IOException, InterruptedException {
 		CredentialsProvider cred = creds();
 
-		Path repoLocalPath = Path.of(gitLocalPath);
-		clearDir(repoLocalPath);
+		clearDir(gitLocalDir);
 
 		var cloneCommand = Git.cloneRepository()
 				.setURI(gitUrl)
-				.setDirectory(repoLocalPath.toFile())
+				.setDirectory(gitLocalDir.toFile())
 				.setCredentialsProvider(cred);
 
 		int bound = now().get(of(ENGLISH).weekOfYear()) % 2 == 0 ? 5 : 30;
@@ -86,8 +86,8 @@ public class GitJob {
 	}
 
 	private void smartChangeFile(Path file) throws IOException {
-		int size = readAllLines(file).size();
-		var option = size > 1000 ? TRUNCATE_EXISTING : APPEND;
+		long sizeInBytes = size(file);
+		var option = sizeInBytes > 10000 ? TRUNCATE_EXISTING : APPEND;
 
 		writeString(file, "\ntext", option);
 	}
@@ -100,12 +100,8 @@ public class GitJob {
 		return new UsernamePasswordCredentialsProvider(login, pass);
 	}
 
+	@SneakyThrows
 	private void clearDir(Path dir) {
-		try {
-			deleteDirectory(dir.toFile());
-		} catch (IOException e) {
-			log.error("Git error clean dir", e);
-			throw new RuntimeException(e);
-		}
+		deleteDirectory(dir.toFile());
 	}
 }

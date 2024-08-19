@@ -1,8 +1,6 @@
 package main.rest;
 
 
-import jakarta.annotation.PostConstruct;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -38,23 +36,17 @@ public class GitJob {
 	private String pass;
 	@Value("${app.git.url}")
 	private String gitUrl;
-	private final Path gitLocalDir = Path.of("/tmp").resolve(randomUUID().toString());
-
-	@PostConstruct
-	private void init() throws IOException {
-		createDirectory(gitLocalDir);
-	}
 
 	@Scheduled(cron = "${cron.git.execute}")
 	@Retryable(backoff = @Backoff(delay = 60000))
 	public void execute() throws GitAPIException, IOException, InterruptedException {
 		CredentialsProvider cred = creds();
 
-		clearDir(gitLocalDir);
+		Path dir = createDirectory(Path.of("/tmp").resolve(randomUUID().toString()));
 
 		var cloneCommand = Git.cloneRepository()
 				.setURI(gitUrl)
-				.setDirectory(gitLocalDir.toFile())
+				.setDirectory(dir.toFile())
 				.setCredentialsProvider(cred);
 
 		int bound = now().get(of(ENGLISH).weekOfYear()) % 2 == 0 ? 5 : 30;
@@ -72,6 +64,8 @@ public class GitJob {
 
 			git.push().setCredentialsProvider(cred).call();
 		}
+
+		deleteDirectory(dir.toFile());
 	}
 
 	private void doChanges(Path file, Git git) throws IOException, GitAPIException {
@@ -98,10 +92,5 @@ public class GitJob {
 
 	private CredentialsProvider creds() {
 		return new UsernamePasswordCredentialsProvider(login, pass);
-	}
-
-	@SneakyThrows
-	private void clearDir(Path dir) {
-		deleteDirectory(dir.toFile());
 	}
 }

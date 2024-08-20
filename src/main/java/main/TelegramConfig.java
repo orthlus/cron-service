@@ -16,13 +16,6 @@ public class TelegramConfig {
 	}
 
 	@Bean
-	public TelegramClient paymentsTelegramClient(@Value("${payments.telegram.bot.token}") String token) {
-		return TelegramClientBuilder.builder()
-				.token(token)
-				.build();
-	}
-
-	@Bean
 	public TelegramClient habrTelegramClient(@Value("${habr.telegram.bot.token}") String token) {
 		return TelegramClientBuilder.builder()
 				.token(token)

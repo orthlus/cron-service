@@ -20,6 +20,7 @@ public class HabrClient {
 	private final RssMapper rssMapper = getMapper(RssMapper.class);
 	@Qualifier("habr")
 	private final RestTemplate client;
+	private final String abbrTag = "class=\"habraabbr\"";
 
 	public Set<String> getNewsFromRss() {
 		RssFeed object = client.getForObject("/rss/news/?limit=100", RssFeed.class);
@@ -34,9 +35,18 @@ public class HabrClient {
 	public boolean isPostHasABBR(String url) {
 		try {
 			String pageContent = client.getForObject(URI.create(url), String.class);
-			return pageContent.contains("class=\"habraabbr\"");
+			return pageContent.contains(abbrTag);
 		} catch (Exception e) {
 			return false;
+		}
+	}
+
+	public int getCountABBRs(String url) {
+		try {
+			String pageContent = client.getForObject(URI.create(url), String.class);
+			return Math.abs(pageContent.split(abbrTag).length - 1);
+		} catch (Exception e) {
+			return 0;
 		}
 	}
 }

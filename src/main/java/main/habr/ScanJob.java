@@ -30,14 +30,22 @@ public class ScanJob {
 		Sets.SetView<String> newNews = Sets.difference(news, lastNews);
 
 		newPosts.stream()
-				.filter(habrClient::isPostHasABBR)
+				.map(url -> new HabrUrlCount(url, habrClient.getCountABBRs(url)))
+				.filter(habrUrlCount -> habrUrlCount.count() > 0)
+				.map(this::buildMessage)
 				.forEach(habrTelegram::sendChannelMessage);
 		newNews.stream()
-				.filter(habrClient::isPostHasABBR)
+				.map(url -> new HabrUrlCount(url, habrClient.getCountABBRs(url)))
+				.filter(habrUrlCount -> habrUrlCount.count() > 0)
+				.map(this::buildMessage)
 				.forEach(habrTelegram::sendChannelMessage);
 
 		habrStorage.saveLastRssPosts(posts);
 		habrStorage.saveLastRssNews(news);
 		log.info("habr finish scan, {} new posts, {} new news", newPosts.size(), newNews.size());
+	}
+
+	private String buildMessage(HabrUrlCount habrUrlCount) {
+		return "%s : %d аббревиатур".formatted(habrUrlCount.url(), habrUrlCount.count());
 	}
 }

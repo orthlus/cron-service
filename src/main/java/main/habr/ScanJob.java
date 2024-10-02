@@ -46,6 +46,6 @@ public class ScanJob {
 	}
 
 	private String buildMessage(HabrUrlCount habrUrlCount) {
-		return "%s : %d аббревиатур".formatted(habrUrlCount.url(), habrUrlCount.count());
+		return "%s : %d abbrs".formatted(habrUrlCount.url(), habrUrlCount.count());
 	}
 }

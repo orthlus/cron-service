@@ -75,6 +75,7 @@ public class GitJob {
 		git.commit()
 				.setMessage(message)
 				.setAuthor("", login)
+				.setCommitter("", login)
 				.setAll(true)
 				.call();
 	}

@@ -30,13 +30,10 @@ public class RestTemplatesConfig {
 	}
 
 	@Bean
-	public RestTemplate cloudflare(RestTemplateBuilder restTemplateBuilder,
-							 @Value("${cloudflare.dns.token}") String token,
-							 @Value("${cloudflare.dns.url}") String url) {
+	public RestTemplate yandexDns(RestTemplateBuilder restTemplateBuilder,
+								  @Value("${yandex.dns.api.url}") String url) {
 		return restTemplateBuilder
 				.rootUri(url)
-				.defaultHeader("authorization", "Bearer " + token)
-				.defaultHeader("content-type", "application/json")
 				.build();
 	}
 

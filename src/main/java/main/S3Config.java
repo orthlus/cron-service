@@ -8,15 +8,15 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class S3Config {
-	@Value("${cloudflare.backuper.s3.url}")
+	@Value("${main.s3.url}")
 	private String url;
-	@Value("${cloudflare.backuper.s3.region}")
+	@Value("${main.s3.region}")
 	private String region;
 
 	@Bean
-	public S3Params cloudflareS3(
-			@Value("${cloudflare.backuper.s3.id}") String id,
-			@Value("${cloudflare.backuper.s3.key}") String key
+	public S3Params yandexDnsS3(
+			@Value("${yandex.dns.s3.id}") String id,
+			@Value("${yandex.dns.s3.key}") String key
 	) {
 		return new DefaultS3Params(id, key, url, region);
 	}

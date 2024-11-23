@@ -1,6 +1,5 @@
 package main.yandex;
 
-import art.aelaort.YandexIAMSupplier;
 import lombok.RequiredArgsConstructor;
 import main.yandex.dto.ZoneInfo;
 import main.yandex.dto.Zones;
@@ -16,8 +15,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class YandexDnsService {
-	private final YandexIAMSupplier yandexIAMSupplier;
 	private final RestTemplate yandexDns;
+	private final RestTemplate iamRestTemplate;
 	@Value("${yandex.dns.folder_id}")
 	private String folderId;
 
@@ -25,7 +24,7 @@ public class YandexDnsService {
 		return yandexDns.exchange(
 						"/dns/v1/zones/%s:listRecordSets".formatted(zoneId),
 						HttpMethod.GET,
-						entityBearerToken(yandexIAMSupplier.getToken()),
+						entityBearerToken(getToken()),
 						String.class)
 				.getBody();
 	}
@@ -34,9 +33,13 @@ public class YandexDnsService {
 		return yandexDns.exchange(
 						"/dns/v1/zones?folderId=%s".formatted(folderId),
 						HttpMethod.GET,
-						entityBearerToken(yandexIAMSupplier.getToken()),
+						entityBearerToken(getToken()),
 						Zones.class)
 				.getBody().zoneInfoList();
+	}
+
+	private String getToken() {
+		return iamRestTemplate.getForObject("/token", String.class);
 	}
 
 	private HttpEntity<?> entityBearerToken(String token) {

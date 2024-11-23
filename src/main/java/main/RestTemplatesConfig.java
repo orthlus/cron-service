@@ -44,4 +44,10 @@ public class RestTemplatesConfig {
 				.rootUri(url)
 				.build();
 	}
+
+	@Bean
+	public RestTemplate iamRestTemplate(RestTemplateBuilder restTemplateBuilder,
+										@Value("${iam.url}") String url) {
+		return restTemplateBuilder.rootUri(url).build();
+	}
 }

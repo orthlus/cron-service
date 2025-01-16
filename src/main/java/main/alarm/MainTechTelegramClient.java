@@ -28,7 +28,11 @@ public class MainTechTelegramClient {
 				.build(), telegramClient);
 	}
 
-	public MessageInfo sendWithOutPreview(String text) {
+	public void sendAlarm(String link) {
+		sendWithOutPreview("Го!\n" + link);
+	}
+
+	private MessageInfo sendWithOutPreview(String text) {
 		SendMessage message = SendMessage.builder()
 				.chatId(adminId)
 				.text(text)

@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 public class Jobs {
 	@Value("${main_tech.alarm.url}")
 	private String url;
-	private final MainTechTelegramSender telegram;
+	@Value("${main_tech.alarm2.url}")
+	private String url2;
+	private final MainTechTelegramClient telegram;
 
 	@Scheduled(cron = "${cron.alarm.send}", zone = "Europe/Moscow")
 	@Retryable(maxAttempts = 10, backoff = @Backoff(delay = 500))
@@ -20,9 +22,9 @@ public class Jobs {
 		telegram.sendAlarm(url);
 	}
 
-	@Scheduled(cron = "${cron.alarm.clean}", zone = "Europe/Moscow")
-	@Retryable(maxAttempts = 10)
-	public void clean() {
-		telegram.deleteLastAlarmMessage();
+	@Scheduled(cron = "${cron.alarm2.send}", zone = "Europe/Moscow")
+	@Retryable(maxAttempts = 10, backoff = @Backoff(delay = 500))
+	public void send2() {
+		telegram.sendAlarm(url2);
 	}
 }

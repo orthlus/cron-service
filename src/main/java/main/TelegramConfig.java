@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Configuration
 public class TelegramConfig {
 	@Bean
-	public TelegramClient maintechTelegramClient(@Value("${main_tech.telegram.bot.token}") String token) {
+	public TelegramClient alarmTelegramClient(@Value("${alarm.telegram.bot.token}") String token) {
 		return TelegramClientBuilder.builder()
 				.token(token)
 				.build();

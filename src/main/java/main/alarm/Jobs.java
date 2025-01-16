@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class Jobs {
-	@Value("${main_tech.alarm.url}")
+	@Value("${alarm.url}")
 	private String url;
-	@Value("${main_tech.alarm2.url}")
+	@Value("${alarm2.url}")
 	private String url2;
-	private final MainTechTelegramClient telegram;
+	private final AlarmTelegramClient telegram;
 
 	@Scheduled(cron = "${cron.alarm.send}", zone = "Europe/Moscow")
 	@Retryable(maxAttempts = 10, backoff = @Backoff(delay = 500))

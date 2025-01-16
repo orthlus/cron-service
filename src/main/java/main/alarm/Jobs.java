@@ -14,7 +14,7 @@ public class Jobs {
 	private String url;
 	@Value("${alarm2.url}")
 	private String url2;
-	private final AlarmTelegramClient telegram;
+	private final AlarmTelegramService telegram;
 
 	@Scheduled(cron = "${cron.alarm.send}", zone = "Europe/Moscow")
 	@Retryable(maxAttempts = 10, backoff = @Backoff(delay = 500))

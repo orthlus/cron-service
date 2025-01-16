@@ -14,7 +14,7 @@ import static art.aelaort.TelegramClientHelpers.execute;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AlarmTelegramClient {
+public class AlarmTelegramService {
 	@Qualifier("alarmTelegramClient")
 	private final TelegramClient telegramClient;
 	@Value("${telegram.admin.id}")

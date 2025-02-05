@@ -22,8 +22,8 @@ public class Jobs {
 		telegram.sendAlarm(url);
 	}
 
-	@Scheduled(cron = "${cron.alarm2.send}", zone = "Europe/Moscow")
-	@Retryable(maxAttempts = 10, backoff = @Backoff(delay = 500))
+//	@Scheduled(cron = "${cron.alarm2.send}", zone = "Europe/Moscow")
+//	@Retryable(maxAttempts = 10, backoff = @Backoff(delay = 500))
 	public void send2() {
 		telegram.sendAlarm(url2);
 	}

@@ -22,14 +22,6 @@ public class S3Config {
 	}
 
 	@Bean
-	public S3Params telegramS3(
-			@Value("${telegram.backuper.s3.id}") String id,
-			@Value("${telegram.backuper.s3.key}") String key
-	) {
-		return new DefaultS3Params(id, key, url, region);
-	}
-
-	@Bean
 	public S3Params habrS3(
 			@Value("${habr.s3.id}") String id,
 			@Value("${habr.s3.key}") String key

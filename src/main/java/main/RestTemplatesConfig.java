@@ -28,18 +28,4 @@ public class RestTemplatesConfig {
 				})
 				.build();
 	}
-
-	@Bean
-	public RestTemplate yandexDns(RestTemplateBuilder restTemplateBuilder,
-								  @Value("${yandex.dns.api.url}") String url) {
-		return restTemplateBuilder
-				.rootUri(url)
-				.build();
-	}
-
-	@Bean
-	public RestTemplate iamRestTemplate(RestTemplateBuilder restTemplateBuilder,
-										@Value("${iam.url}") String url) {
-		return restTemplateBuilder.rootUri(url).build();
-	}
 }

@@ -14,14 +14,6 @@ public class S3Config {
 	private String region;
 
 	@Bean
-	public S3Params yandexDnsS3(
-			@Value("${yandex.dns.s3.id}") String id,
-			@Value("${yandex.dns.s3.key}") String key
-	) {
-		return new DefaultS3Params(id, key, url, region);
-	}
-
-	@Bean
 	public S3Params habrS3(
 			@Value("${habr.s3.id}") String id,
 			@Value("${habr.s3.key}") String key

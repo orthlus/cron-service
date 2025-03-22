@@ -38,17 +38,6 @@ public class RestTemplatesConfig {
 	}
 
 	@Bean
-	public RestTemplate telegramBackuper(RestTemplateBuilder restTemplateBuilder,
-										 @Value("${telegram.backuper.tdl.url}") String url,
-										 @Value("${telegram.backuper.role}") String user,
-										 @Value("${telegram.backuper.password}") String password) {
-		return restTemplateBuilder
-				.rootUri(url)
-				.basicAuthentication(user, password)
-				.build();
-	}
-
-	@Bean
 	public RestTemplate iamRestTemplate(RestTemplateBuilder restTemplateBuilder,
 										@Value("${iam.url}") String url) {
 		return restTemplateBuilder.rootUri(url).build();

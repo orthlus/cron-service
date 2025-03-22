@@ -17,8 +17,8 @@ public class RestTemplatesConfig {
 							 @Value("${habr.http.delay}") int delay) {
 		String baseUrl = "https://habr.com/ru";
 		return restTemplateBuilder.rootUri(baseUrl)
-				.setConnectTimeout(Duration.ofSeconds(timeout))
-				.setReadTimeout(Duration.ofSeconds(timeout))
+				.connectTimeout(Duration.ofSeconds(timeout))
+				.readTimeout(Duration.ofSeconds(timeout))
 				.interceptors((request, body, execution) -> {
 					try {
 						TimeUnit.SECONDS.sleep(delay);
